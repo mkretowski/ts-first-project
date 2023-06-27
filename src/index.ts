@@ -1,5 +1,3 @@
-import { log } from 'console';
-
 const inquirer = require('inquirer');
 const consola = require('consola');
 
