@@ -44,18 +44,6 @@ class Message {
   }
 }
 
-const msg = new Message('heLlo world!');
-msg.show(); // "heLlo world!"
-msg.capitalize();
-msg.show(); // "Hello world!"
-msg.toLowerCase();
-msg.show(); // "hello world!"
-msg.toUpperCase();
-msg.show(); // "HELLO WORLD!"
-Message.showColorized(MessageVariant.Success, 'Test'); // √ "Test"
-Message.showColorized(MessageVariant.Error, 'Test 2'); // "x Test 2"
-Message.showColorized(MessageVariant.Info, 'Test 3'); // ℹ "Test 3"
-
 const startApp = async () => {
   enum Action {
     List = 'list',
