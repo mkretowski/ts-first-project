@@ -81,17 +81,6 @@ class UsersData {
   }
 }
 
-const users = new UsersData();
-users.showAll();
-users.add({ name: 'Jan', age: 20 });
-users.add({ name: 'Adam', age: 30 });
-users.add({ name: 'Kasia', age: 23 });
-users.add({ name: 'Basia', age: -6 });
-users.showAll();
-users.remove('Maurycy');
-users.remove('Adam');
-users.showAll();
-
 const startApp = async () => {
   enum Action {
     List = 'list',
