@@ -1,3 +1,5 @@
+import { log } from 'console';
+
 const inquirer = require('inquirer');
 const consola = require('consola');
 
@@ -6,6 +8,29 @@ enum MessageVariant {
   Error = 'error',
   Info = 'info',
 }
+
+enum Action {
+  List = 'list',
+  Add = 'add',
+  Update = 'update',
+  Remove = 'remove',
+  Quit = 'quit',
+}
+
+interface User {
+  name: string;
+  age: number;
+}
+
+interface updatedUser {
+  name: string;
+  newName: number;
+  newAge: number;
+}
+
+type InquirerAnswers = {
+  action: Action;
+};
 
 class Message {
   constructor(private content: string) {}
@@ -42,19 +67,8 @@ class Message {
   }
 }
 
-interface User {
-  name: string;
-  age: number;
-}
-
-interface updatedUser {
-  name: string;
-  newName: number;
-  newAge: number;
-}
-
 class UsersData {
-  private data: (User | updatedUser)[] = [];
+  private data: User[] = [];
 
   public showAll(): void {
     if (this.data.length === 0) console.log('No data...');
@@ -82,10 +96,11 @@ class UsersData {
       index !== -1 &&
       typeof updateUser.newAge === 'number' &&
       updateUser.newAge > 0 &&
-      typeof updateUser.name === 'string' &&
+      typeof updateUser.newName === 'string' &&
       updateUser.name.length > 0
     ) {
-      this.data[index] = updateUser;
+      this.data[index] = { name: updateUser.newName, age: updateUser.newAge };
+
       Message.showColorized(MessageVariant.Success, 'User has been successfully updated!');
     } else {
       Message.showColorized(MessageVariant.Error, 'Wrong data!');
@@ -101,31 +116,6 @@ class UsersData {
     }
   }
 }
-
-const users = new UsersData();
-console.log('\n');
-console.info('???? Welcome to the UsersApp!');
-console.log('====================================');
-Message.showColorized(MessageVariant.Info, 'Available actions');
-console.log('\n');
-console.log('list – show all users');
-console.log('add – add new user to the list');
-console.log('update – update user data on the list');
-console.log('remove – remove user from the list');
-console.log('quit – quit the app');
-console.log('\n');
-
-enum Action {
-  List = 'list',
-  Add = 'add',
-  Update = 'update',
-  Remove = 'remove',
-  Quit = 'quit',
-}
-
-type InquirerAnswers = {
-  action: Action;
-};
 
 const startApp = () => {
   inquirer
@@ -197,5 +187,18 @@ const startApp = () => {
       startApp();
     });
 };
+
+const users = new UsersData();
+console.log('\n');
+console.info('???? Welcome to the UsersApp!');
+console.log('====================================');
+Message.showColorized(MessageVariant.Info, 'Available actions');
+console.log('\n');
+console.log('list – show all users');
+console.log('add – add new user to the list');
+console.log('update – update user data on the list');
+console.log('remove – remove user from the list');
+console.log('quit – quit the app');
+console.log('\n');
 
 startApp();
