@@ -8,22 +8,20 @@ enum MessageVariant {
 }
 
 class Message {
-  constructor(private content: string) {
-    const thisMessage = this;
-  }
-  public show() {
+  constructor(private content: string) {}
+  public show(): void {
     const thisMessage = this;
     console.log(thisMessage.content);
   }
-  public capitalize() {
+  public capitalize(): void {
     const thisMessage = this;
     thisMessage.content = thisMessage.content.charAt(0).toUpperCase() + thisMessage.content.slice(1).toLowerCase();
   }
-  public toUpperCase() {
+  public toUpperCase(): void {
     const thisMessage = this;
     thisMessage.content = thisMessage.content.toUpperCase();
   }
-  public toLowerCase() {
+  public toLowerCase(): void {
     const thisMessage = this;
     thisMessage.content = thisMessage.content.toLowerCase();
   }
@@ -43,6 +41,56 @@ class Message {
     }
   }
 }
+
+interface User {
+  name: string;
+  age: number;
+}
+
+class UsersData {
+  private data: User[] = [];
+
+  public showAll(): void {
+    if (this.data.length === 0) console.log('No data...');
+    else {
+      Message.showColorized(MessageVariant.Info, 'Users Info');
+      console.table(this.data);
+    }
+  }
+  public add(newUser: User): void {
+    if (
+      typeof newUser.age === 'number' &&
+      newUser.age > 0 &&
+      typeof newUser.name === 'string' &&
+      newUser.name.length > 0
+    ) {
+      this.data.push(newUser);
+      Message.showColorized(MessageVariant.Success, 'User has been successfully added!');
+    } else {
+      Message.showColorized(MessageVariant.Error, 'Wrong data!');
+    }
+  }
+  public remove(userName: string): void {
+    const index = this.data.findIndex((user) => user.name === userName);
+    if (index !== -1) {
+      this.data.splice(index, 1);
+      Message.showColorized(MessageVariant.Success, 'User deleted!');
+    } else {
+      Message.showColorized(MessageVariant.Error, 'User not found...');
+    }
+  }
+}
+
+const users = new UsersData();
+users.showAll();
+users.add({ name: 'Jan', age: 20 });
+users.add({ name: 'Adam', age: 30 });
+users.add({ name: 'Kasia', age: 23 });
+users.add({ name: 'Basia', age: -6 });
+users.showAll();
+users.remove('Maurycy');
+users.remove('Adam');
+users.showAll();
 
 const startApp = async () => {
   enum Action {
