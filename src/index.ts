@@ -20,9 +20,9 @@ interface User {
   age: number;
 }
 
-interface updatedUser {
-  name: string;
-  newName: number;
+interface UpdatedUser {
+  index: number;
+  newName: string;
   newAge: number;
 }
 
@@ -88,26 +88,23 @@ class UsersData {
       Message.showColorized(MessageVariant.Error, 'Wrong data!');
     }
   }
-  public update(updateUser: updatedUser): void {
-    const index = this.data.findIndex((user) => user.name === updateUser.name);
+  public update(updateUser: UpdatedUser): void {
     if (
-      index !== -1 &&
+      this.data[updateUser.index] &&
       typeof updateUser.newAge === 'number' &&
       updateUser.newAge > 0 &&
       typeof updateUser.newName === 'string' &&
-      updateUser.name.length > 0
+      updateUser.newName.length > 0
     ) {
-      this.data[index] = { name: updateUser.newName, age: updateUser.newAge };
-
+      this.data[updateUser.index] = { name: updateUser.newName, age: updateUser.newAge };
       Message.showColorized(MessageVariant.Success, 'User has been successfully updated!');
     } else {
       Message.showColorized(MessageVariant.Error, 'Wrong data!');
     }
   }
-  public remove(userName: string): void {
-    const index = this.data.findIndex((user) => user.name === userName);
-    if (index !== -1) {
-      this.data.splice(index, 1);
+  public remove(userIndex: number): void {
+    if (this.data[userIndex]) {
+      this.data.splice(userIndex, 1);
       Message.showColorized(MessageVariant.Success, 'User deleted!');
     } else {
       Message.showColorized(MessageVariant.Error, 'User not found...');
@@ -145,21 +142,21 @@ const startApp = () => {
           users.add(user);
           break;
         case Action.Remove:
-          const name = await inquirer.prompt([
+          const userIndex = await inquirer.prompt([
             {
-              name: 'name',
-              type: 'input',
-              message: 'Enter name',
+              name: 'index',
+              type: 'number',
+              message: 'Enter user id',
             },
           ]);
-          users.remove(name.name);
+          users.remove(userIndex.index);
           break;
         case Action.Update:
           const updateUser = await inquirer.prompt([
             {
-              name: 'name',
-              type: 'input',
-              message: 'Enter name of user you want to edit:',
+              name: 'index',
+              type: 'number',
+              message: 'Enter id of user you want to edit:',
             },
             {
               name: 'newName',
